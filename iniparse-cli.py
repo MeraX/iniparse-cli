@@ -153,6 +153,8 @@ Omit all parameters to return a list of all sections"""
 		value = ini.get(section,option)
 		if value.startswith('"') and value.endswith('"'):
 			return value[1:-1]
+		elif value.startswith("'") and value.endswith("'"):
+			return value[1:-1]
 		else:
 			return value
 
