@@ -14,7 +14,7 @@ iniparse-cli.py -d config.ini {SECTION}                    // deletes SECTION
 iniparse-cli.py -d config.ini {SECTION} {OPTION}           // deletes OPTION in SECTION
 iniparse-cli.py -d config.ini {SECTION} {OPTION} {VALUE}   // deletes value of OPTION in SECTION when VALUE matches
 
-iniparse-cli.py --sient {...}  // suppress all error messages
+iniparse-cli.py --silent {...}  // suppress all error messages
 
 License & Copyright
 -------------------
@@ -96,7 +96,6 @@ License GPLv3: GNU GPL version 3 only <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law."""
 		sys.exit(0)
-
 
 	if args.silent:
 		def silent_excepthook(type, value, traceback):
