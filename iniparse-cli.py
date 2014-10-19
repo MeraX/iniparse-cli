@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """iniparse-cli  - cli-wrapper tool for the python-library
-Version 1.0 (build 20140417)
+Version 1.0.1 (build 20141019)
 
 Usage
 -----
@@ -33,8 +33,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-__version__ = '1.0'
-__build__ = '20140417'
+__version__ = '1.0.1'
+__build__ = '20141019'
 
 import sys
 import iniparse
@@ -222,13 +222,15 @@ def excepthook(type, value, traceback):
 
 def main():
 	sys.excepthook = excepthook
+
 	parser = getArgParser()
 	args = parseArgs(parser)
+
 	if args.delete:
 		delete(args.inifile,*args.input)
 	else:
 		result = manage(args.inifile,*args.input)
-		if result is not None:
+		if result:
 			print result
 
 if __name__ == '__main__':
