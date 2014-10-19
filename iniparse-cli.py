@@ -14,6 +14,8 @@ iniparse-cli.py -d config.ini {SECTION}                    // deletes SECTION
 iniparse-cli.py -d config.ini {SECTION} {OPTION}           // deletes OPTION in SECTION
 iniparse-cli.py -d config.ini {SECTION} {OPTION} {VALUE}   // deletes value of OPTION in SECTION when VALUE matches
 
+iniparse-cli.py --sient {...}  // suppress all error messages
+
 License & Copyright
 -------------------
 Copyright (C) 2013 - 2014 Marek Jacob
@@ -49,7 +51,7 @@ Returns
 	parser: instance of argparse.ArgumentParser
 """
 
-	parser = argparse.ArgumentParser(usage='%(prog)s [-d|--delete] [-h] {INIFILE} [SECTION] [OPTION] [VALUE]',
+	parser = argparse.ArgumentParser(usage='%(prog)s [-s|--silent] [-d|--delete] [-h] {INIFILE} [SECTION] [OPTION] [VALUE]',
 		description='Returns, edits and deletes sections and options of an ini file.')
 
 	# input
@@ -69,6 +71,9 @@ Returns
 	parser.add_argument('--version', action='store_true',
 		help="show program's version number and license and exit")
 
+	parser.add_argument('-s','--silent', action='store_true',
+		help="suppress all error messages")
+
 	return parser
 
 def parseArgs(parser):
@@ -79,21 +84,28 @@ args : argparse.Namespace
 	args.inifile : string
 	args.input : list
 	args.delete : bool
+	args.silent : bool
 """
 	args = parser.parse_args()
 
 	if args.version:
 		print os.path.basename(sys.argv[0]), __version__, 'Build', __build__
-		print """Copyright (C) 2013 Marek Jacob
+		print """Copyright (C) 2013 - 2014 Marek Jacob
 
 License GPLv3: GNU GPL version 3 only <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law."""
 		sys.exit(0)
 
+
+	if args.silent:
+		def silent_excepthook(type, value, traceback):
+			sys.exit(2)
+		sys.excepthook = silent_excepthook
+
 	if args.inifile is None:
 		raise UsageError('too few arguments. missing inifile.')
-	if len(args.input) > 3:
+	if len(args.input) > 4:
 		raise UsageError('too many arguments')
 	elif len(args.input) > 0 and args.input[0] == "":
 		raise UsageError('section name cannot be empty')
