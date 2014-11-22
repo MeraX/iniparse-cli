@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """iniparse-cli  - cli-wrapper tool for the python-library
-Version 1.0.1 (build 20141019)
+Version 1.0.2 (build 20141122)
 
 Usage
 -----
@@ -33,16 +33,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-__version__ = '1.0.1'
-__build__ = '20141019'
+__version__ = '1.0.2'
+__build__ = '20141122'
 
 import sys
 import iniparse
 import argparse
 import os
 
-#__DEBUG__ = True
+# in some versions of iniparse, this attribute does not exist.
+try:
+	iniparse.DuplicateSectionError
+except AttributeError:
+	import ConfigParser
+	iniparse.DuplicateSectionError = ConfigParser.DuplicateSectionError
 
+#__DEBUG__ = True
 
 def getArgParser():
 	"""setup an argument parser to collect the values we need
@@ -75,6 +81,7 @@ Returns
 		help="suppress all error messages")
 
 	return parser
+
 
 def parseArgs(parser):
 	""" checks the count of arguments and prints version
